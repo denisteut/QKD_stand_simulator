@@ -23,13 +23,26 @@ private slots:
     void SetBaseAngle_v4();
     void SetBaseAngle_v5();
 
+    void Init();
+
     void on_randButton_clicked();
 
     void on_initButton_clicked();
 
     void on_Alt_Method_clicked();
+    void RandomizeAngles();
 
     void on_Alt_Method_toggled(bool checked);
+
+    void on_zeroingAngles_clicked();
+    //to set plates angles in band from 0 to 360
+    void RoundAngles();
+    void on_TestButton_clicked();
+    void WriteDataInFile(double &p1, double &p2, double &p3, double &p4);
+    void on_testInit_clicked();
+    void TestIteration(double &p1, double &p2, double &p3, double &p4);
+
+    void on_OpenFile_clicked();
 
 private:
     Ui::MainWindow *ui;
