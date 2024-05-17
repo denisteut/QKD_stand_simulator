@@ -23,11 +23,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    if(stand.ScanM){
-        ui->displayMLabel->setText("1");
-    }else{
-        ui->displayMLabel->setText("0");
+
+    double step = ui->scanStepLine->text().toDouble();
+    if(step == 0){
+        step = 1.0;
     }
+
     int plate_number = ui->PlateNumber->currentIndex()+1; // номер пластины
     int maxangle = 180;
     if(ui->maxRotateStep->text() != ""){
@@ -91,7 +92,7 @@ void MainWindow::on_pushButton_clicked()
     }
 
 
-    for(int i = 0; i < maxangle; i=i+1){
+    for(double i = 0; i < maxangle+0.1; i=i+step){
 
         stand.SetAngle(plate_number, (currangle + i)/180.0*M_PI);
 
@@ -123,10 +124,10 @@ void MainWindow::on_randButton_clicked()
     RandomizeAngles();
 }
 void MainWindow::RandomizeAngles(){
-    double  a1 = std::rand()%360,
-        a2 = std::rand()%360,
-        a3 = std::rand()%360,
-        a4 = std::rand()%360;
+    double  a1 = fmod(std::rand()/10.0, 360.0),
+        a2 = fmod(std::rand()/10.0, 360.0),
+        a3 = fmod(std::rand()/10.0, 360.0),
+        a4 = fmod(std::rand()/10.0, 360.0);
     stand.SetAngle(1,(a1)/180.0*M_PI);
     stand.SetAngle(2,(a2)/180.0*M_PI);
     stand.SetAngle(3,(a3)/180.0*M_PI);
@@ -139,91 +140,94 @@ void MainWindow::RandomizeAngles(){
 }
 
 void MainWindow::SetBaseAngle(){
-  double s1 = 0.0, s2 = 0.0;
-  double startplates[4];
-  startplates[0] = stand.GetAngle(1);
-  startplates[1] = stand.GetAngle(2);
-  startplates[2] = stand.GetAngle(3);
-  startplates[3] = stand.GetAngle(4);
 
-  stand.GetSignals(std::ref(s1),std::ref(s2));
-
-
-  double MaxSDelta = 0, Delta1, Delta2, SDelta,
-      DirPlate2 = 1, RotStep2 = 45/180.0*M_PI,
-      MaxSLevel1 = 0, MaxSLevel2 = s1, MinSLevel1 = s1,
-      Step4_1 = 0,    Step4_2 = 0, flag = 0, SLevel1, SLevel2;
-
-  do{
-    do{
-      stand.GetSignals(std::ref(s1),std::ref(s2));
-      if(s1 > MaxSLevel1){
-        MaxSLevel1 = s1;
-        Step4_1 = stand.GetAngle(4); //max
-      }
-      if(s1 < MinSLevel1){
-        MinSLevel1 = s1;
-        Step4_2 = stand.GetAngle(4); //min
-      }
-      stand.SetAngle(4,stand.GetAngle(4)+2.0/180.0*M_PI);//Поворот 4 пластины на 1 шаг
-
-
-    } while (stand.GetAngle(4) - startplates[3] < M_PI);
-    SDelta = MaxSLevel1 - MinSLevel1;
-    stand.SetAngle(4, startplates[3]);
-
-    if ((MaxSLevel1 - MinSLevel1) > MaxSDelta){
-
-      stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
+    double s1 = 0.0, s2 = 0.0;
+    double startplates[4];
+    startplates[0] = stand.GetAngle(1);
+    startplates[1] = stand.GetAngle(2);
+    startplates[2] = stand.GetAngle(3);
+    startplates[3] = stand.GetAngle(4);
+    double accuracy = 1.0;
+    if(ui->accuracyLine->text() != ""){
+        accuracy = ui->accuracyLine->text().toDouble();
     }
-    else {
-      if(RotStep2 > 1.0/180.0*M_PI){
-        RotStep2 = RotStep2 / 2;
-
-        DirPlate2 = -DirPlate2;
-        stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
-      }
-      else{
-
-        flag = 1;
-      }
-
+    if(accuracy == 0){
+        accuracy = 1.0;
     }
-    MaxSDelta = MaxSLevel1 - MinSLevel1;
-    MaxSLevel1 = MaxSDelta/2;
-    MinSLevel1 = MaxSLevel1;
-
-  } while(flag != 1);
-  stand.SetAngle(4, Step4_1);
-
-  //stand.SetAngle(stand.GetAngle(1),stand.GetAngle(2)+45.0/180.0*M_PI,stand.GetAngle(3),stand.GetAngle(4)+45/180.0*M_PI);
-  stand.SetAngle(2, stand.GetAngle(2)+45.0/180.0*M_PI);
-  stand.SetAngle(4, stand.GetAngle(4)+45.0/180.0*M_PI);
-
-  MaxSLevel1 = 0;
-  double Step3 = 0;
-  do{
 
     stand.GetSignals(std::ref(s1),std::ref(s2));
 
-    stand.SetAngle(3, stand.GetAngle(3)+1.0/180.0*M_PI);
 
-    if(s1 > MaxSLevel1){
-      MaxSLevel1 = s1;
-      Step3 = stand.GetAngle(3);
-    }
-  } while((stand.GetAngle(3)-startplates[2]) < 90.0/180.0*M_PI); // Пока палстина 3 не повернулась на 90 градусов (не прошла 300 шагов)
+    double MaxSDelta = 0, Delta1, Delta2, SDelta,
+        DirPlate2 = 1, RotStep2 = 45/180.0*M_PI,
+        MaxSLevel1 = 0, MaxSLevel2 = s1, MinSLevel1 = s1,
+        Step4_1 = 0,    Step4_2 = 0, flag = 0, SLevel1, SLevel2;
 
-  stand.SetAngle(3,Step3);
-  double  a1 = stand.GetAngle(1)*180.0/M_PI,
-          a2 = stand.GetAngle(2)*180.0/M_PI,
-          a3 = stand.GetAngle(3)*180.0/M_PI,
-          a4 = stand.GetAngle(4)*180.0/M_PI;
+    do{
+        do{
+            stand.GetSignals(std::ref(s1),std::ref(s2));
+            if(s1 > MaxSLevel1){
+                MaxSLevel1 = s1;
+                Step4_1 = stand.GetAngle(4); //max
+            }
+            if(s1 < MinSLevel1){
+                MinSLevel1 = s1;
+                Step4_2 = stand.GetAngle(4); //min
+            }
+            stand.SetAngle(4,stand.GetAngle(4)+accuracy/180.0*M_PI);//Поворот 4 пластины на 1 шаг
+        } while (stand.GetAngle(4) - startplates[3] < M_PI);
+        SDelta = MaxSLevel1 - MinSLevel1;
+        stand.SetAngle(4, startplates[3]);
+        if ((MaxSLevel1 - MinSLevel1) > MaxSDelta){
+            stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
+        }
+        else {
+            if(RotStep2 > 1.0/180.0*M_PI){
+                RotStep2 = RotStep2 / 2;
 
-  ui->BaseAngle_1->setText(QString::number(a1));
-  ui->BaseAngle_2->setText(QString::number(a2));
-  ui->BaseAngle_3->setText(QString::number(a3));
-  ui->BaseAngle_4->setText(QString::number(a4));
+                DirPlate2 = -DirPlate2;
+                stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
+            }
+            else{
+
+                flag = 1;
+            }
+
+        }
+        MaxSDelta = MaxSLevel1 - MinSLevel1;
+        MaxSLevel1 = MaxSDelta/2;
+        MinSLevel1 = MaxSLevel1;
+    } while(flag != 1);
+    stand.SetAngle(4, Step4_1);
+
+    //stand.SetAngle(stand.GetAngle(1),stand.GetAngle(2)+45.0/180.0*M_PI,stand.GetAngle(3),stand.GetAngle(4)+45/180.0*M_PI);
+    stand.SetAngle(2, stand.GetAngle(2)+45.0/180.0*M_PI);
+    stand.SetAngle(4, stand.GetAngle(4)+45.0/180.0*M_PI);
+
+    MaxSLevel1 = 0;
+    double Step3 = 0;
+    do{
+
+        stand.GetSignals(std::ref(s1),std::ref(s2));
+
+        stand.SetAngle(3, stand.GetAngle(3)+accuracy/180.0*M_PI);
+
+        if(s1 > MaxSLevel1){
+            MaxSLevel1 = s1;
+            Step3 = stand.GetAngle(3);
+        }
+    } while((stand.GetAngle(3)-startplates[2]) < 90.0/180.0*M_PI); // Пока палстина 3 не повернулась на 90 градусов (не прошла 300 шагов)
+
+    stand.SetAngle(3,Step3);
+    double  a1 = stand.GetAngle(1)*180.0/M_PI,
+            a2 = stand.GetAngle(2)*180.0/M_PI,
+            a3 = stand.GetAngle(3)*180.0/M_PI,
+            a4 = stand.GetAngle(4)*180.0/M_PI;
+
+    ui->BaseAngle_1->setText(QString::number(a1));
+    ui->BaseAngle_2->setText(QString::number(a2));
+    ui->BaseAngle_3->setText(QString::number(a3));
+    ui->BaseAngle_4->setText(QString::number(a4));
 }
 int Get_max_points(int *points){
   int res = fmax(points[0], points[1]);
@@ -744,7 +748,7 @@ void MainWindow::on_testInit_clicked()
 
 void MainWindow::on_OpenFile_clicked()
 {
-    std::string command = "libreoffice testres.csv";
+    std::string command = "libreoffice ./testres.csv";
     system(command.c_str());
 }
 

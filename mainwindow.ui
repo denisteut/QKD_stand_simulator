@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QKD Stand Sim</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QCustomPlot" name="widget" native="true">
@@ -168,6 +168,13 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QLineEdit" name="scanStepLine">
+       <property name="placeholderText">
+        <string>Scan Step</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget_3">
@@ -242,19 +249,6 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="displayMLabel">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>320</y>
-      <width>54</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="verticalLayoutWidget_4">
     <property name="geometry">
      <rect>
@@ -269,6 +263,13 @@
       <widget class="QLineEdit" name="numberOfIter">
        <property name="placeholderText">
         <string>Number of iterations</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="accuracyLine">
+       <property name="placeholderText">
+        <string>Accuracy</string>
        </property>
       </widget>
      </item>
