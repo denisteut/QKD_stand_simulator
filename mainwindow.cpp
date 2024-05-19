@@ -542,7 +542,6 @@ void MainWindow::RoundAngles(){
 
 }
 
-
 void MainWindow::SetBaseAngle_v4(){
     double s1 = 0.0, s2 = 0.0;
     double startplates[4];
@@ -645,8 +644,6 @@ void MainWindow::SetBaseAngle_v4(){
 
 void MainWindow::SetBaseAngle_v5(){return;}
 
-
-
 void MainWindow::on_Alt_Method_clicked()
 {
 
@@ -683,6 +680,18 @@ void MainWindow::on_TestButton_clicked()
     RoundAngles();
 }
 
+double CalcDelta(){
+    double smax = stand.GetMaxSignal();
+    double s1 = 0.0, s2 = 0.0;
+    stand.GetSignals(std::ref(s1), std::ref(s2));
+    if(s1 > s1){
+        return (smax-s1+s2)/2.0;
+    }
+    else{
+        return (smax-s2+s1)/2.0;
+    }
+}
+
 void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
     Init();
     double  base_angle1 = ui->BaseAngle_1->text().toDouble()/180.0*M_PI,
@@ -691,15 +700,15 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
             base_angle4 = ui->BaseAngle_4->text().toDouble()/180.0*M_PI,
             s1 = 0.0, s2 = 0.0,
             delta1 = 0.0, delta2 = 0.0;
-    stand.GetSignals(std::ref(s1), std::ref(s2));
-    delta1 = abs(s1-s2);
+    //stand.GetSignals(std::ref(s1), std::ref(s2));
+    delta1 = CalcDelta();
 
     stand.SetAngle(1,base_angle1+22.5/180.0*M_PI);
     stand.GetSignals(std::ref(s1), std::ref(s2));
     p1 = abs(s1-s2);
 
     stand.SetAngle(1,base_angle1+45.0/180.0*M_PI);
-    delta2 = abs(s1-s2);
+    delta2 = CalcDelta();
     p2 = abs(delta1-delta2);
 
     stand.SetAngle(1,base_angle1);
@@ -708,7 +717,7 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
     stand.GetSignals(std::ref(s1), std::ref(s2));
     p3 = abs(s1-s2);
     stand.SetAngle(2, base_angle2+90.0/180.0*M_PI);
-    delta2 = abs(s1-s2);
+    delta2 = CalcDelta();
     p4 = abs(delta1-delta2);
 
 
@@ -716,12 +725,15 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
 
 }
 
+
+
 void MainWindow::WriteDataInFile( double &p1, double &p2, double &p3, double &p4){
 
     table_result << p1 << "," << p2 << "," << p3 << "," << p4 << "\n";
 
 
 }
+
 void MainWindow::on_testInit_clicked()
 {
 
