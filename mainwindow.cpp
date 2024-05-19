@@ -447,8 +447,8 @@ void MainWindow::SetBaseAngle_v3(){
 
         }
 
-        //MaxSLevel1 = MaxSDelta/2;
-        //MinSLevel1 = MaxSLevel1;
+        MaxSLevel1 = MaxSDelta/2;
+        MinSLevel1 = MaxSLevel1;
 
     } while(flag != 1);
 
@@ -492,7 +492,6 @@ void MainWindow::SetBaseAngle_v3(){
 
 void MainWindow::on_initButton_clicked()
 {
-
     Init();
 }
 
@@ -517,6 +516,7 @@ void MainWindow::Init(){
         break;
     }
 }
+
 void MainWindow::RoundAngles(){
     if (abs(ui->BaseAngle_1->text().toDouble()) > 360){
 
@@ -538,8 +538,6 @@ void MainWindow::RoundAngles(){
         ui->BaseAngle_4->setText(QString::number(fmod(ui->BaseAngle_4->text().toDouble(),360.0)));
         stand.SetAngle(4,ui->BaseAngle_4->text().toDouble()/180.0*M_PI);
     }
-
-
 }
 
 void MainWindow::SetBaseAngle_v4(){
@@ -684,7 +682,7 @@ double CalcDelta(){
     double smax = stand.GetMaxSignal();
     double s1 = 0.0, s2 = 0.0;
     stand.GetSignals(std::ref(s1), std::ref(s2));
-    if(s1 > s1){
+    if(s1 > s2){
         return (smax-s1+s2)/2.0;
     }
     else{
@@ -709,7 +707,7 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
 
     stand.SetAngle(1,base_angle1+45.0/180.0*M_PI);
     delta2 = CalcDelta();
-    p2 = abs(delta1-delta2);
+    p2 = abs(delta1+delta2);
 
     stand.SetAngle(1,base_angle1);
 
@@ -718,11 +716,7 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
     p3 = abs(s1-s2);
     stand.SetAngle(2, base_angle2+90.0/180.0*M_PI);
     delta2 = CalcDelta();
-    p4 = abs(delta1-delta2);
-
-
-
-
+    p4 = abs(delta1+delta2);
 }
 
 
