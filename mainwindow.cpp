@@ -803,7 +803,7 @@ void MainWindow::on_testInit_clicked()
 
 void MainWindow::on_OpenFile_clicked()
 {
-    std::string command = "onlyoffice-desktopeditors";
+    std::string command = "onlyoffice-desktopeditors --review=./testres";
     system(command.c_str());
 
 }
