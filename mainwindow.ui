@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>977</width>
-    <height>594</height>
+    <width>988</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,115 +20,28 @@
       <x>0</x>
       <y>0</y>
       <width>981</width>
-      <height>311</height>
+      <height>291</height>
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>380</y>
-      <width>111</width>
-      <height>161</height>
+      <x>10</x>
+      <y>310</y>
+      <width>961</width>
+      <height>231</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>Scan</string>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="3" column="3">
+      <widget class="QLineEdit" name="lineEditSecondPlateBS">
+       <property name="placeholderText">
+        <string>2nd plate basestep</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="BaseAngle_1">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="BaseAngle_2">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="BaseAngle_3">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="BaseAngle_4">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>120</x>
-      <y>380</y>
-      <width>161</width>
-      <height>161</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QRadioButton" name="Alt_Method">
-       <property name="text">
-        <string>Alternative Method</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Plate1</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Plate2</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Plate3</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>Plate4</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>340</y>
-      <width>281</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+     <item row="0" column="0">
       <widget class="QComboBox" name="PlateNumber">
        <property name="editable">
         <bool>false</bool>
@@ -158,57 +71,42 @@
        </item>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="maxRotateStep">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Scan for</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="scanStepLine">
-       <property name="placeholderText">
-        <string>Scan Step</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>290</x>
-      <y>340</y>
-      <width>161</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
-     <item>
-      <widget class="QPushButton" name="randButton">
-       <property name="text">
-        <string>Randomize Angles</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zeroingAngles">
-       <property name="text">
-        <string>Set Angles to Zero</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+     <item row="3" column="2">
       <widget class="QPushButton" name="initButton">
        <property name="text">
         <string>Init</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="BaseAngle_1">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <widget class="QPushButton" name="testInit">
+       <property name="text">
+        <string>Test Init</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="scanStepLine">
+       <property name="placeholderText">
+        <string>Scan Step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="randButton">
+       <property name="text">
+        <string>Randomize Angles</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
       <widget class="QComboBox" name="init_ComboBox">
        <item>
         <property name="text">
@@ -237,7 +135,31 @@
        </item>
       </widget>
      </item>
-     <item>
+     <item row="5" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>number of measures</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="BaseAngle_2">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="3">
+      <widget class="QLineEdit" name="lineEditPlatesSteps"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Plate1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="2">
       <widget class="QPushButton" name="TestButton">
        <property name="enabled">
         <bool>false</bool>
@@ -247,47 +169,134 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_4">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>340</y>
-      <width>161</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item>
+     <item row="0" column="3">
       <widget class="QLineEdit" name="numberOfIter">
        <property name="placeholderText">
         <string>Number of iterations</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="accuracyLine">
-       <property name="placeholderText">
-        <string>Accuracy</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="testInit">
+     <item row="7" column="3">
+      <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Test Init</string>
+        <string>plates steps</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="3" column="1">
+      <widget class="QRadioButton" name="Alt_Method">
+       <property name="text">
+        <string>Alternative Method</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLineEdit" name="BaseAngle_4">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Plate4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="lineEditSecondPlateAcc">
+       <property name="placeholderText">
+        <string>2nd plate accuracy</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Plate2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="3">
+      <widget class="QLineEdit" name="lineEditNumOfMeasures">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+       <property name="placeholderText">
+        <string>number of measures</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Scan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
       <widget class="QPushButton" name="OpenFile">
        <property name="text">
         <string>Open Results File</string>
        </property>
       </widget>
      </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Plate3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="BaseAngle_3">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="maxRotateStep">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Scan for</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="accuracyLine">
+       <property name="placeholderText">
+        <string>Scan accuracy</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="zeroingAngles">
+       <property name="text">
+        <string>Set Angles to Zero</string>
+       </property>
+      </widget>
+     </item>
     </layout>
+   </widget>
+   <widget class="QProgressBar" name="progressTestBar">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>540</y>
+      <width>961</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="format">
+     <string>%v/%m</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -295,7 +304,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>977</width>
+     <width>988</width>
      <height>23</height>
     </rect>
    </property>

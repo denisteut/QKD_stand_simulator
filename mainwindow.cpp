@@ -139,7 +139,8 @@ void MainWindow::RandomizeAngles(){
 
 }
 
-void MainWindow::SetBaseAngle(){
+void MainWindow::SetBaseAngle(double &number_steps, int &number_of_measures){
+
 
     double s1 = 0.0, s2 = 0.0;
     double startplates[4];
@@ -147,25 +148,56 @@ void MainWindow::SetBaseAngle(){
     startplates[1] = stand.GetAngle(2);
     startplates[2] = stand.GetAngle(3);
     startplates[3] = stand.GetAngle(4);
-    double accuracy = 1.0;
+    double accuracy;
+
     if(ui->accuracyLine->text() != ""){
         accuracy = ui->accuracyLine->text().toDouble();
+        if(accuracy == 0){
+            accuracy = 1.0;
+            ui->accuracyLine->setText("1.0");
+        }
     }
-    if(accuracy == 0){
+    else{
         accuracy = 1.0;
+        ui->accuracyLine->setText("1.0");
     }
 
-    stand.GetSignals(std::ref(s1),std::ref(s2));
 
-
+    stand.GetSignals(std::ref(s1),std::ref(s2), std::ref(number_of_measures));
     double MaxSDelta = 0, Delta1, Delta2, SDelta,
-        DirPlate2 = 1, RotStep2 = 45/180.0*M_PI,
+        DirPlate2 = 1, RotStep2, second_plate_acc,
         MaxSLevel1 = 0, MaxSLevel2 = s1, MinSLevel1 = s1,
-        Step4_1 = 0,    Step4_2 = 0, flag = 0, SLevel1, SLevel2;
+        Step4_1 = 0,    Step4_2 = 0, flag = 0;
+
+    if(ui->lineEditSecondPlateBS->text() != "")
+    {
+        RotStep2 = ui->lineEditSecondPlateBS->text().toDouble()/180.0*M_PI;
+        if(RotStep2 == 0.0){
+            RotStep2 = 45/180.0*M_PI;
+            ui->lineEditSecondPlateBS->setText("45.0");
+        }
+    }
+    else{
+        RotStep2 = 45/180.0*M_PI;
+        ui->lineEditSecondPlateBS->setText("45");
+    }
+
+    if(ui->lineEditSecondPlateAcc->text() != ""){
+        second_plate_acc = ui->lineEditSecondPlateAcc->text().toDouble();
+        if(second_plate_acc <= 1.0){
+            second_plate_acc = 2.0;
+            ui->lineEditSecondPlateAcc->setText("2.0");
+        }
+    }
+    else{
+        second_plate_acc = 2.0;
+        ui->lineEditSecondPlateAcc->setText("2.0");
+    }
+
 
     do{
         do{
-            stand.GetSignals(std::ref(s1),std::ref(s2));
+            stand.GetSignals(std::ref(s1),std::ref(s2), std::ref(number_of_measures));
             if(s1 > MaxSLevel1){
                 MaxSLevel1 = s1;
                 Step4_1 = stand.GetAngle(4); //max
@@ -175,18 +207,21 @@ void MainWindow::SetBaseAngle(){
                 Step4_2 = stand.GetAngle(4); //min
             }
             stand.SetAngle(4,stand.GetAngle(4)+accuracy/180.0*M_PI);//Поворот 4 пластины на 1 шаг
+            number_steps += accuracy;
         } while (stand.GetAngle(4) - startplates[3] < M_PI);
         SDelta = MaxSLevel1 - MinSLevel1;
         stand.SetAngle(4, startplates[3]);
         if ((MaxSLevel1 - MinSLevel1) > MaxSDelta){
             stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
+            number_steps += RotStep2/M_PI*180.0;
         }
         else {
-            if(RotStep2 > 1.0/180.0*M_PI){
-                RotStep2 = RotStep2 / 2;
+            if(RotStep2 > 1.0/180.0*3.15){
+                RotStep2 = RotStep2 / second_plate_acc;
 
                 DirPlate2 = -DirPlate2;
                 stand.SetAngle(2, stand.GetAngle(2) + DirPlate2 * RotStep2);
+                number_steps += RotStep2/M_PI*180.0;
             }
             else{
 
@@ -198,19 +233,21 @@ void MainWindow::SetBaseAngle(){
         MaxSLevel1 = MaxSDelta/2;
         MinSLevel1 = MaxSLevel1;
     } while(flag != 1);
+    number_steps += abs(stand.GetAngle(4)-Step4_1)/M_PI*180.0;
     stand.SetAngle(4, Step4_1);
 
     //stand.SetAngle(stand.GetAngle(1),stand.GetAngle(2)+45.0/180.0*M_PI,stand.GetAngle(3),stand.GetAngle(4)+45/180.0*M_PI);
     stand.SetAngle(2, stand.GetAngle(2)+45.0/180.0*M_PI);
     stand.SetAngle(4, stand.GetAngle(4)+45.0/180.0*M_PI);
-
+    number_steps += 90;
     MaxSLevel1 = 0;
     double Step3 = 0;
     do{
 
-        stand.GetSignals(std::ref(s1),std::ref(s2));
+        stand.GetSignals(std::ref(s1),std::ref(s2), std::ref(number_of_measures));
 
         stand.SetAngle(3, stand.GetAngle(3)+accuracy/180.0*M_PI);
+        number_steps += accuracy;
 
         if(s1 > MaxSLevel1){
             MaxSLevel1 = s1;
@@ -219,6 +256,9 @@ void MainWindow::SetBaseAngle(){
     } while((stand.GetAngle(3)-startplates[2]) < 90.0/180.0*M_PI); // Пока палстина 3 не повернулась на 90 градусов (не прошла 300 шагов)
 
     stand.SetAngle(3,Step3);
+    number_steps += abs(stand.GetAngle(3)-Step3)/M_PI*180.0;
+    ui->lineEditNumOfMeasures->setText(QString::number(number_of_measures));
+    ui->lineEditPlatesSteps->setText(QString::number(number_steps));
     double  a1 = stand.GetAngle(1)*180.0/M_PI,
             a2 = stand.GetAngle(2)*180.0/M_PI,
             a3 = stand.GetAngle(3)*180.0/M_PI,
@@ -447,8 +487,8 @@ void MainWindow::SetBaseAngle_v3(){
 
         }
 
-        MaxSLevel1 = MaxSDelta/2;
-        MinSLevel1 = MaxSLevel1;
+        //MaxSLevel1 = MaxSDelta/2;
+        //MinSLevel1 = MaxSLevel1;
 
     } while(flag != 1);
 
@@ -492,13 +532,15 @@ void MainWindow::SetBaseAngle_v3(){
 
 void MainWindow::on_initButton_clicked()
 {
-    Init();
+    double number_of_steps = 0.0;
+    int number_of_measures=0;
+    Init(std::ref(number_of_steps), std::ref(number_of_measures));
 }
 
-void MainWindow::Init(){
+void MainWindow::Init(double &number_steps, int &number_of_measures){
     switch (ui->init_ComboBox->currentIndex()) {
     case 0:
-        SetBaseAngle();
+        SetBaseAngle(std::ref(number_steps), std::ref(number_of_measures));
         break;
     case 1:
         SetBaseAngle_v2();
@@ -516,7 +558,6 @@ void MainWindow::Init(){
         break;
     }
 }
-
 void MainWindow::RoundAngles(){
     if (abs(ui->BaseAngle_1->text().toDouble()) > 360){
 
@@ -538,7 +579,10 @@ void MainWindow::RoundAngles(){
         ui->BaseAngle_4->setText(QString::number(fmod(ui->BaseAngle_4->text().toDouble(),360.0)));
         stand.SetAngle(4,ui->BaseAngle_4->text().toDouble()/180.0*M_PI);
     }
+
+
 }
+
 
 void MainWindow::SetBaseAngle_v4(){
     double s1 = 0.0, s2 = 0.0;
@@ -642,6 +686,8 @@ void MainWindow::SetBaseAngle_v4(){
 
 void MainWindow::SetBaseAngle_v5(){return;}
 
+
+
 void MainWindow::on_Alt_Method_clicked()
 {
 
@@ -678,36 +724,24 @@ void MainWindow::on_TestButton_clicked()
     RoundAngles();
 }
 
-double CalcDelta(){
-    double smax = stand.GetMaxSignal();
-    double s1 = 0.0, s2 = 0.0;
-    stand.GetSignals(std::ref(s1), std::ref(s2));
-    if(s1 > s2){
-        return (smax-s1+s2)/2.0;
-    }
-    else{
-        return (smax-s2+s1)/2.0;
-    }
-}
-
-void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
-    Init();
+void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4, double &number_steps, int &number_of_measures){
+    Init(std::ref(number_steps), std::ref(number_of_measures));
     double  base_angle1 = ui->BaseAngle_1->text().toDouble()/180.0*M_PI,
             base_angle2 = ui->BaseAngle_2->text().toDouble()/180.0*M_PI,
             base_angle3 = ui->BaseAngle_3->text().toDouble()/180.0*M_PI,
             base_angle4 = ui->BaseAngle_4->text().toDouble()/180.0*M_PI,
             s1 = 0.0, s2 = 0.0,
             delta1 = 0.0, delta2 = 0.0;
-    //stand.GetSignals(std::ref(s1), std::ref(s2));
-    delta1 = CalcDelta();
+    stand.GetSignals(std::ref(s1), std::ref(s2));
+    delta1 = abs(s1-s2);
 
     stand.SetAngle(1,base_angle1+22.5/180.0*M_PI);
     stand.GetSignals(std::ref(s1), std::ref(s2));
     p1 = abs(s1-s2);
 
     stand.SetAngle(1,base_angle1+45.0/180.0*M_PI);
-    delta2 = CalcDelta();
-    p2 = abs(delta1+delta2);
+    delta2 = abs(s1-s2);
+    p2 = abs(delta1-delta2);
 
     stand.SetAngle(1,base_angle1);
 
@@ -715,36 +749,51 @@ void MainWindow::TestIteration(double &p1, double &p2, double &p3, double &p4){
     stand.GetSignals(std::ref(s1), std::ref(s2));
     p3 = abs(s1-s2);
     stand.SetAngle(2, base_angle2+90.0/180.0*M_PI);
-    delta2 = CalcDelta();
-    p4 = abs(delta1+delta2);
-}
+    delta2 = abs(s1-s2);
+    p4 = abs(delta1-delta2);
 
 
-
-void MainWindow::WriteDataInFile( double &p1, double &p2, double &p3, double &p4){
-
-    table_result << p1 << "," << p2 << "," << p3 << "," << p4 << "\n";
 
 
 }
 
+void MainWindow::WriteDataInFile( double &p1, double &p2, double &p3, double &p4, double &number_steps, int &number_of_measures){
+
+    table_result << p1 << "," << p2 << "," << p3 << "," << p4 << "," << number_of_measures << "," << number_steps << "\n";
+
+}
+void MainWindow::WriteDataInFile( double &p1, double &p2, double &number_steps, int &number_of_measures){
+
+    table_result << p1 << "," << p2 << "," << number_of_measures << "," << number_steps << "\n";
+
+}
 void MainWindow::on_testInit_clicked()
 {
 
 
     table_result.open("testres.csv");
-    table_result<<"p1,p2,p3,p4\n";
-
+    //table_result<<"p1,p2,p3,p4,measures,steps\n";
+    table_result<<"bias,delta,measures,steps\n";
+    double number_steps = 0.0;
+    int number_of_measures = 0;
     int num_iter = 100;
     if(ui->numberOfIter->text() != ""){
         num_iter = ui->numberOfIter->text().toInt();
     }
 
     double p1 = 0.0, p2 = 0.0, p3 = 0.0, p4 = 0.0;
+    ui->progressTestBar->setMaximum(num_iter);
     for(int j = 0; j < num_iter; j++){
+        number_steps = 0.0;
+        number_of_measures = 0.0;
         RandomizeAngles();
-        TestIteration(std::ref(p1), std::ref(p2), std::ref(p3), std::ref(p4));
-        WriteDataInFile(std::ref(p1), std::ref(p2), std::ref(p3), std::ref(p4));
+        TestIteration(std::ref(p1), std::ref(p2), std::ref(p3), std::ref(p4), std::ref(number_steps), std::ref(number_of_measures));
+        p1 = (p1+p3)/2.0;
+        p2 = (p2+p4)/2.0;
+        WriteDataInFile(std::ref(p1), std::ref(p2), std::ref(number_steps), std::ref(number_of_measures));
+        //WriteDataInFile(std::ref(p1), std::ref(p2), std::ref(p3), std::ref(p4), std::ref(number_steps), std::ref(number_of_measures));
+        ui->progressTestBar->setValue(j+1);
+
     }
     table_result <<"=AVERAGE(A2:A"<<num_iter+1<<"),"<<"=AVERAGE(B2:B"<<num_iter+1<<"),"<<"=AVERAGE(C2:C"<<num_iter+1<<"),"<<"=AVERAGE(D2:D"<<num_iter+1<<")\n";
     table_result << num_iter << " iterations is finished";
@@ -754,7 +803,8 @@ void MainWindow::on_testInit_clicked()
 
 void MainWindow::on_OpenFile_clicked()
 {
-    std::string command = "libreoffice ./testres.csv";
+    std::string command = "onlyoffice-desktopeditors";
     system(command.c_str());
+
 }
 

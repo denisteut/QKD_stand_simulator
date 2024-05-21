@@ -13,20 +13,29 @@ Stand::Stand() {
 }
 
 
-
 int Stand::GetSignals(double &h, double &v){
     if(ScanM){
         GetSignals1(std::ref(h), std::ref(v));
     }else{
         GetSignals2(std::ref(h), std::ref(v));
     }
+
+    return 0;
+}
+int Stand::GetSignals(double &h, double &v, int &number_of_measures){
+    if(ScanM){
+        GetSignals1(std::ref(h), std::ref(v));
+    }else{
+        GetSignals2(std::ref(h), std::ref(v));
+    }
+    number_of_measures++;
     return 0;
 }
 int Stand::GetSignals1(double &h, double &v){
     Eigen::MatrixXcd Jones(2,1);
     Jones(0,0) = 0.0 + 1i;
     Jones(1,0) = 0.0 + 0i;;
-
+    Jones = Jones * 100;
     Eigen::MatrixXcd hwp(2,2);
     Eigen::MatrixXcd qwp(2,2);
     Eigen::MatrixXcd lp1(2,2);
@@ -48,8 +57,8 @@ int Stand::GetSignals1(double &h, double &v){
     //Eigen::MatrixXcd Jones2= lp2 * Jones;
     //h = Jones1.norm();
     //v = Jones2.norm();
-    h = pow(abs(Jones(0,0)),2)*GetMaxSignal();
-    v = pow(abs(Jones(1,0)),2)*GetMaxSignal();
+    h = pow(abs(Jones(0,0)),2);
+    v = pow(abs(Jones(1,0)),2);
     return 1;
 }
 
@@ -63,14 +72,12 @@ int Stand::GetSignals2(double &h, double &v){
     Eigen::MatrixXcd P2 = Mmatrix(angle3, 1/2.0) * P1;
     Eigen::MatrixXcd P3 = Mmatrix(angle4, 1/4.0) * P2;
 
-    h = pow(abs(P3(0,0)),2)*GetMaxSignal();
-    v = pow(abs(P3(1,0)),2)*GetMaxSignal();
+    h = pow(abs(P3(0,0)),2)*100;
+    v = pow(abs(P3(1,0)),2)*100;
 
     return 1;
 }
-double Stand::GetMaxSignal(){
-    return this->max_signal_level;
-}
+
 Eigen::MatrixXcd Rmatrix(double angle){
     Eigen::MatrixXcd r_marix(2,2);
     r_marix(0,0) = cos(angle);

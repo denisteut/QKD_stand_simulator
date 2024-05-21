@@ -12,6 +12,7 @@ class Stand
 public:
     Stand();
     int GetSignals(double &h, double &v);
+    int GetSignals(double &h, double &v, int &number_of_measures);
     int GetSignals1(double &h, double &v);
     int GetSignals2(double &h, double &v);
     //creates complexmatrix of plates
@@ -23,12 +24,11 @@ public:
     void Init1();
     void Init2();
     bool ScanM;
-    double GetMaxSignal();
 
 private:
     Eigen::MatrixXcd Mmatrix(double angle, double plate);
     double angle1, angle2, angle3, angle4, power_level;
-    double max_signal_level = 1000;
+
     Eigen::MatrixXcd hwp;
     Eigen::MatrixXcd qwp;
     std::complex<double> complexnum;

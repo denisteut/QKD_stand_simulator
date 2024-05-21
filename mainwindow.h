@@ -17,13 +17,13 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-    void SetBaseAngle();
+    void SetBaseAngle(double &number_steps, int &number_of_measures);
     void SetBaseAngle_v2();
     void SetBaseAngle_v3();
     void SetBaseAngle_v4();
     void SetBaseAngle_v5();
 
-    void Init();
+    void Init(double &number_steps, int &number_of_measures);
 
     void on_randButton_clicked();
 
@@ -38,9 +38,10 @@ private slots:
     //to set plates angles in band from 0 to 360
     void RoundAngles();
     void on_TestButton_clicked();
-    void WriteDataInFile(double &p1, double &p2, double &p3, double &p4);
+    void WriteDataInFile(double &p1, double &p2, double &p3, double &p4, double &number_steps, int &number_of_measures);
+    void WriteDataInFile(double &p1, double &p2, double &number_steps, int &number_of_measures);
     void on_testInit_clicked();
-    void TestIteration(double &p1, double &p2, double &p3, double &p4);
+    void TestIteration(double &p1, double &p2, double &p3, double &p4, double &number_steps, int &number_of_measures);
 
     void on_OpenFile_clicked();
 
