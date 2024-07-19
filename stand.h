@@ -21,7 +21,7 @@ public:
     void SetAngle(int plate_number, double angle);
     void SetAngle(double angle1, double angle2, double angle3, double angle4);
     double GetAngle(int plate_number);
-
+    void SetLaserPower(int laser_power);
     bool ScanM;
 
 private:

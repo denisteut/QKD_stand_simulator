@@ -188,3 +188,6 @@ double Stand::GetAngle(int plate_number){
     }
 }
 
+void Stand::SetLaserPower(int laser_power){
+    this->power_level = laser_power;
+}

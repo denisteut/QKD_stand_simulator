@@ -2,25 +2,64 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1212</width>
-    <height>738</height>
+    <width>1300</width>
+    <height>700</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+    <horstretch>1</horstretch>
+    <verstretch>1</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1300</width>
+    <height>700</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1600</width>
+    <height>900</height>
+   </size>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>2</width>
+    <height>2</height>
+   </size>
+  </property>
+  <property name="baseSize">
+   <size>
+    <width>1</width>
+    <height>1</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>QKD Stand Sim</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="applications-other"/>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QCustomPlot" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>981</width>
-      <height>291</height>
+      <x>10</x>
+      <y>10</y>
+      <width>1281</width>
+      <height>281</height>
      </rect>
     </property>
    </widget>
@@ -34,41 +73,34 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="3" column="0">
-      <widget class="QPushButton" name="pushButton">
+     <item row="7" column="3">
+      <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>Scan</string>
+        <string>plates steps</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLineEdit" name="scanStepLine">
+     <item row="6" column="3">
+      <widget class="QLineEdit" name="lineEditNumOfMeasures">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
        <property name="placeholderText">
-        <string>Scan Step</string>
+        <string>number of measures</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="3">
-      <widget class="QLineEdit" name="lineEditSecondPlateAcc">
-       <property name="placeholderText">
-        <string>2nd plate accuracy</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="BaseAngle_1">
+     <item row="6" column="2">
+      <widget class="QPushButton" name="testInit">
        <property name="text">
-        <string>0</string>
+        <string>Test Init</string>
        </property>
       </widget>
      </item>
-     <item row="9" column="2">
-      <widget class="QPushButton" name="TestButton">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Testbuttion</string>
+        <string>Plate1</string>
        </property>
       </widget>
      </item>
@@ -79,22 +111,12 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QPushButton" name="zeroingAngles">
-       <property name="text">
-        <string>Set Angles to Zero</string>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="accuracyLine">
+       <property name="placeholderText">
+        <string>Scan accuracy</string>
        </property>
       </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QLineEdit" name="BaseAngle_3">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="3">
-      <widget class="QLineEdit" name="lineEditPlatesSteps"/>
      </item>
      <item row="9" column="0">
       <widget class="QLabel" name="label_3">
@@ -110,10 +132,17 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_2">
+     <item row="3" column="3">
+      <widget class="QLineEdit" name="lineEditSecondPlateBS">
+       <property name="placeholderText">
+        <string>2nd plate basestep</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QLineEdit" name="BaseAngle_4">
        <property name="text">
-        <string>Plate2</string>
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -124,10 +153,66 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="3">
-      <widget class="QLineEdit" name="lineEditSecondPlateBS">
+     <item row="10" column="0" colspan="4">
+      <widget class="QProgressBar" name="progressTestBar">
+       <property name="value">
+        <number>0</number>
+       </property>
+       <property name="format">
+        <string>%v/%m</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QComboBox" name="init_ComboBox">
+       <item>
+        <property name="text">
+         <string>Init1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Init2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Init3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Init4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Init5</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="lineEditSecondPlateAcc">
        <property name="placeholderText">
-        <string>2nd plate basestep</string>
+        <string>2nd plate accuracy</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="maxRotateStep">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Scan for</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>number of measures</string>
        </property>
       </widget>
      </item>
@@ -135,6 +220,68 @@
       <widget class="QPushButton" name="initButton">
        <property name="text">
         <string>Init</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="scanStepLine">
+       <property name="placeholderText">
+        <string>Scan Step</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="BaseAngle_2">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="randButton">
+       <property name="text">
+        <string>Randomize Angles</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Plate3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QLineEdit" name="BaseAngle_3">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="2">
+      <widget class="QPushButton" name="TestButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>Testbuttion</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="zeroingAngles">
+       <property name="text">
+        <string>Set Angles to Zero</string>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="3">
+      <widget class="QLineEdit" name="lineEditPlatesSteps"/>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="BaseAngle_1">
+       <property name="text">
+        <string>0</string>
        </property>
       </widget>
      </item>
@@ -168,129 +315,90 @@
        </item>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QLineEdit" name="BaseAngle_2">
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>0</string>
+        <string>Plate2</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="2">
-      <widget class="QPushButton" name="testInit">
+     <item row="3" column="0">
+      <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Test Init</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="3">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>plates steps</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="maxRotateStep">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Scan for</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Plate1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="3">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>number of measures</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="3">
-      <widget class="QLineEdit" name="lineEditNumOfMeasures">
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-       <property name="placeholderText">
-        <string>number of measures</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="accuracyLine">
-       <property name="placeholderText">
-        <string>Scan accuracy</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="2">
-      <widget class="QComboBox" name="init_ComboBox">
-       <item>
-        <property name="text">
-         <string>Init1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Init2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Init3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Init4</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Init5</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Plate3</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="randButton">
-       <property name="text">
-        <string>Randomize Angles</string>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="1">
-      <widget class="QLineEdit" name="BaseAngle_4">
-       <property name="text">
-        <string>0</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0" colspan="4">
-      <widget class="QProgressBar" name="progressTestBar">
-       <property name="value">
-        <number>0</number>
-       </property>
-       <property name="format">
-        <string>%v/%m</string>
+        <string>Scan</string>
        </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QGroupBox" name="stand_inf_box">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>320</y>
+      <width>271</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Stand state control</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>251</width>
+       <height>45</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="1">
+       <widget class="QSlider" name="Laser_control">
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="sliderPosition">
+         <number>100</number>
+        </property>
+        <property name="tracking">
+         <bool>true</bool>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="label_current_laser_power">
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>100</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="laser_power_lable_i">
+        <property name="text">
+         <string>Laser Power</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -298,8 +406,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1212</width>
-     <height>25</height>
+     <width>1300</width>
+     <height>21</height>
     </rect>
    </property>
   </widget>

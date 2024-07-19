@@ -45,6 +45,11 @@ private slots:
 
     void on_OpenFile_clicked();
 
+    void on_Laser_control_sliderMoved(int position);
+
+
+    void on_Laser_control_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
      QVector<double> x,y1,y2,y3;

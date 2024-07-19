@@ -809,3 +809,18 @@ void MainWindow::on_OpenFile_clicked()
 
 }
 
+
+void MainWindow::on_Laser_control_sliderMoved(int position)
+{
+    //stand->SetLaserPower(position);
+    //ui->label_current_laser_power->setText(QString::number(position));
+}
+
+
+
+void MainWindow::on_Laser_control_valueChanged(int value)
+{
+    stand->SetLaserPower(value);
+    ui->label_current_laser_power->setText(QString::number(value));
+}
+
